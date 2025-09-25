@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nisha Animation</title>
+<style>
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #f5f5f5;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+    flex-direction: column;
+  }
+
+  .text-container {
+    font-size: 3rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+
+  .main-name {
+    margin: 0 40px; /* space between Nisha and sliding texts */
+  }
+
+  .slide {
+    position: relative;
+    white-space: nowrap;
+    transition: transform 2s ease;
+  }
+
+  .shruti {
+    transform: translateX(-150vw); /* start completely off left */
+    color: blue;
+  }
+
+  .shruti.show {
+    transform: translateX(0); /* stop with gap before Nisha */
+  }
+
+  .laxman {
+    transform: translateX(150vw); /* start completely off right */
+    color: green;
+  }
+
+  .laxman.show {
+    transform: translateX(0); /* stop with gap before Nisha */
+  }
+
+  .image-container {
+    margin-top: 20px;
+    height: 200px;
+    position: relative;
+  }
+
+  .image-container img {
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 1.5s ease; /* smooth fade effect */
+  }
+
+  .image-container img.show {
+    opacity: 1;
+  }
+</style>
+</head>
+<body>
+
+<div class="text-container">
+  <span id="shruti" class="slide shruti">Shruti</span>
+  <span class="main-name">Nisha</span>
+  <span id="laxman" class="slide laxman">Laxman</span>
+</div>
+
+<div class="image-container">
+  <img id="sad" src="sad.jpg" alt="Sad Image">
+  <img id="happy" src="happy.jpg" alt="Happy Image">
+</div>
+
+<script>
+  // Step 1: Slide in Shruti
+  setTimeout(() => {
+    document.getElementById('shruti').classList.add('show');
+
+    // Step 2: After Shruti finishes sliding, show sad.jpg
+    setTimeout(() => {
+      document.getElementById('sad').classList.add('show');
+
+      // Step 3: Then slide in Laxman
+      setTimeout(() => {
+        document.getElementById('laxman').classList.add('show');
+
+        // Step 4: Replace sad with happy smoothly
+        setTimeout(() => {
+          document.getElementById('sad').classList.remove('show');
+          document.getElementById('happy').classList.add('show');
+        }, 2000); // after Laxman reaches
+      }, 1000);
+    }, 2000);
+  }, 500);
+</script>
+
+</body>
+</html>
