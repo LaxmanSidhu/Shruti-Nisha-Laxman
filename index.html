@@ -10,7 +10,7 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background: #f5f5f5;
+    background: linear-gradient(to bottom, #ffe6f0, #fff);
     font-family: Arial, sans-serif;
     overflow: hidden;
     flex-direction: column;
@@ -25,7 +25,8 @@
   }
 
   .main-name {
-    margin: 0 40px; /* space between Nisha and sliding texts */
+    margin: 0 40px;
+    color: #d63384;
   }
 
   .slide {
@@ -35,21 +36,35 @@
   }
 
   .shruti {
-    transform: translateX(-150vw); /* start completely off left */
+    transform: translateX(-150vw);
     color: blue;
   }
 
   .shruti.show {
-    transform: translateX(0); /* stop with gap before Nisha */
+    transform: translateX(0);
   }
 
   .laxman {
-    transform: translateX(150vw); /* start completely off right */
+    transform: translateX(150vw);
     color: green;
   }
 
   .laxman.show {
-    transform: translateX(0); /* stop with gap before Nisha */
+    transform: translateX(0);
+  }
+
+  /* Heartbeat glow */
+  .heartbeat {
+    animation: heartbeat 1.2s infinite;
+    color: #ff3366;
+    text-shadow: 0 0 15px #ff6699;
+  }
+
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(1.2); }
+    50% { transform: scale(1); }
+    75% { transform: scale(1.1); }
   }
 
   .image-container {
@@ -65,17 +80,91 @@
     left: 50%;
     transform: translateX(-50%);
     opacity: 0;
-    transition: opacity 1.5s ease; /* smooth fade effect */
+    transition: opacity 1.5s ease;
+    border-radius: 12px;
   }
 
   .image-container img.show {
     opacity: 1;
   }
+
+  /* Falling hearts */
+  .heart {
+    position: fixed;
+    top: -20px;
+    font-size: 24px;
+    color: red;
+    animation: fall linear forwards;
+    opacity: 0.8;
+    z-index: 1;
+  }
+
+  @keyframes fall {
+    to {
+      transform: translateY(110vh) rotate(360deg);
+      opacity: 0;
+    }
+  }
+
+  /* Typing effect */
+  .message {
+    margin-top: 20px;
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #cc0066;
+    border-right: 2px solid #cc0066;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 0;
+    animation: typing 4s steps(30, end) forwards, blink 0.8s infinite;
+  }
+
+  @keyframes typing {
+    to { width: 100%; }
+  }
+
+  @keyframes blink {
+    50% { border-color: transparent; }
+  }
+
+  /* Surprise button */
+  #surprise-btn {
+    margin-top: 25px;
+    padding: 12px 24px;
+    background: #ff4d88;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 1.5s ease;
+  }
+
+  #surprise-btn.show {
+    opacity: 1;
+  }
+
+  /* Hidden surprise message */
+  #surprise-message {
+    margin-top: 20px;
+    font-size: 1.8rem;
+    color: #ff1a66;
+    font-weight: bold;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1.5s ease, transform 1.5s ease;
+  }
+
+  #surprise-message.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
 </style>
 </head>
 <body>
 
-<div class="text-container">
+<div class="text-container" id="names">
   <span id="shruti" class="slide shruti">Shruti</span>
   <span class="main-name">Nisha</span>
   <span id="laxman" class="slide laxman">Laxman</span>
@@ -86,27 +175,68 @@
   <img id="happy" src="happy.jpg" alt="Happy Image">
 </div>
 
+<center><div id="love-message" class="message"></div></center>
+
+<button id="surprise-btn">Click for Surprise 💌</button>
+<div id="surprise-message">Forever & Always... 💖</div>
+
 <script>
   // Step 1: Slide in Shruti
   setTimeout(() => {
     document.getElementById('shruti').classList.add('show');
 
-    // Step 2: After Shruti finishes sliding, show sad.jpg
+    // Step 2: Show sad.jpg
     setTimeout(() => {
       document.getElementById('sad').classList.add('show');
 
-      // Step 3: Then slide in Laxman
+      // Step 3: Slide in Laxman
       setTimeout(() => {
         document.getElementById('laxman').classList.add('show');
 
-        // Step 4: Replace sad with happy smoothly
+        // Step 4: Replace sad with happy
         setTimeout(() => {
           document.getElementById('sad').classList.remove('show');
           document.getElementById('happy').classList.add('show');
-        }, 2000); // after Laxman reaches
+
+          // Add heartbeat effect
+          document.getElementById('names').classList.add('heartbeat');
+
+          // Trigger falling hearts
+          startHearts();
+
+          // Show typing love message
+          setTimeout(() => {
+            document.getElementById('love-message').textContent = "You make my world brighter ❤️";
+
+            // After typing, show surprise button
+            setTimeout(() => {
+              document.getElementById('surprise-btn').classList.add('show');
+            }, 1000);
+
+          }, 500);
+
+        }, 2000);
       }, 1000);
     }, 2000);
   }, 500);
+
+  // Falling hearts generator
+  function startHearts() {
+    setInterval(() => {
+      const heart = document.createElement("div");
+      heart.classList.add("heart");
+      heart.innerHTML = "❤";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = (3 + Math.random() * 2) + "s";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 5000);
+    }, 400);
+  }
+
+  // Surprise button click
+  document.getElementById('surprise-btn').addEventListener('click', () => {
+    document.getElementById('surprise-message').classList.add('show');
+  });
 </script>
 
 </body>
